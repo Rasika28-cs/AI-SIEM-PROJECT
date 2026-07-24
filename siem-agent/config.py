@@ -1,0 +1,3 @@
+SERVER_URL = "http://127.0.0.1:8000/api/logs/upload/"
+AGENT_ID = "AGENT-001"
+SEND_INTERVAL = 30
