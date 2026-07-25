@@ -52,10 +52,9 @@
 
 <nav>
 
-    <a href="/">Home</a>
-
     {% if user.is_authenticated %}
 
+        <a href="/dashboard/">Dashboard</a>
         <a href="/logout/">Logout</a>
 
     {% else %}
