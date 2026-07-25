@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'agents',
     'logs',
+    'alerts',
     'dashboard',
     'api',
 ]
