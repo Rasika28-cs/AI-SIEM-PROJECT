@@ -9,7 +9,7 @@ def get_system_info():
     hostname = socket.gethostname()
 
     try:
-        ip_address = socket.gethostbyname(hostname)
+        ip_address = socket.gethostbyname(socket.gethostname())
     except Exception:
         ip_address = "Unknown"
 
@@ -26,12 +26,16 @@ def get_system_info():
 
     processes = []
 
+
+
     for process in psutil.process_iter(['pid', 'name']):
         try:
+
             processes.append({
                 "pid": process.info["pid"],
                 "name": process.info["name"]
             })
+
         except (psutil.NoSuchProcess,
                 psutil.AccessDenied,
                 psutil.ZombieProcess):
