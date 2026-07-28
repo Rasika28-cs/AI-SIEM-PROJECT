@@ -5,6 +5,8 @@ from logs.login_logs import collect_login_events
 from logs.process_logs import collect_process_events
 from logs.network_logs import collect_network_events
 
+from collectors.application_logs import collect_application_logs
+
 from attack_simulator import (
     simulate_failed_login,
     simulate_port_scan,
@@ -113,6 +115,13 @@ def main():
 
         # send to backend
         # send_log(event)
+
+    application_logs = collect_application_logs()
+
+
+    for log in application_logs:
+
+        print("Application Log:",log)
 
 
 if __name__ == "__main__":
