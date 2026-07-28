@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto p-8">
+
+<h1 class="text-3xl font-bold mb-6">
+
+Alert Details
+
+</h1>
+
+<div class="space-y-4 border rounded-lg p-6 shadow">
+
+<p><strong>Attack:</strong> {{ alert.attack_type }}</p>
+
+<p><strong>Severity:</strong> {{ alert.severity }}</p>
+
+<p><strong>Status:</strong> {{ alert.status }}</p>
+
+<p><strong>Agent:</strong> {{ alert.log.agent.hostname }}</p>
+
+<p><strong>Event:</strong> {{ alert.log.event_type }}</p>
+
+<p><strong>Source:</strong> {{ alert.log.source }}</p>
+
+<p><strong>Message:</strong> {{ alert.log.message }}</p>
+
+<p><strong>Created:</strong> {{ alert.created_time }}</p>
+
+</div>
+
+<hr class="my-8">
+
+<h2 class="text-xl font-semibold mb-4">
+
+Update Status
+
+</h2>
+
+<form method="POST"
+      action="{% url 'update_status' alert.id %}">
+
+{% csrf_token %}
+
+<select
+name="status"
+class="border p-2 rounded">
+
+{% for value,label in alert.STATUS_CHOICES %}
+
+<option
+value="{{ value }}"
+{% if alert.status == value %}selected{% endif %}>
+
+{{ label }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+<button
+class="bg-blue-600 text-white px-4 py-2 rounded ml-3">
+
+Save
+
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

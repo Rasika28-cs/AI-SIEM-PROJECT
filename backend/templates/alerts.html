@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="p-8">
+
+<h1 class="text-3xl font-bold mb-6">
+Alert Management
+</h1>
+
+<form method="GET" class="mb-6 flex flex-wrap gap-4">
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Search Attack"
+        value="{{ request.GET.search }}"
+        class="border p-2 rounded"
+    >
+
+    <select name="severity" class="border p-2 rounded">
+
+        <option value="">All Severity</option>
+
+        <option value="HIGH"
+        {% if request.GET.severity == "HIGH" %}selected{% endif %}>
+            HIGH
+        </option>
+
+        <option value="MEDIUM"
+        {% if request.GET.severity == "MEDIUM" %}selected{% endif %}>
+            MEDIUM
+        </option>
+
+        <option value="LOW"
+        {% if request.GET.severity == "LOW" %}selected{% endif %}>
+            LOW
+        </option>
+
+    </select>
+
+    <select name="status" class="border p-2 rounded">
+
+        <option value="">All Status</option>
+
+        <option value="Open"
+        {% if request.GET.status == "Open" %}selected{% endif %}>
+            Open
+        </option>
+
+        <option value="Investigating"
+        {% if request.GET.status == "Investigating" %}selected{% endif %}>
+            Investigating
+        </option>
+
+        <option value="Resolved"
+        {% if request.GET.status == "Resolved" %}selected{% endif %}>
+            Resolved
+        </option>
+
+    </select>
+
+    <button
+        type="submit"
+        class="bg-blue-600 text-white px-4 rounded">
+        Search
+    </button>
+
+</form>
+
+<table class="min-w-full border">
+
+<thead class="bg-gray-800 text-white">
+
+<tr>
+
+<th class="p-3">Time</th>
+
+<th class="p-3">Attack</th>
+
+<th class="p-3">Severity</th>
+
+<th class="p-3">Agent</th>
+
+<th class="p-3">Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for alert in alerts %}
+
+<tr class="border-b">
+
+<td class="p-3">
+{{ alert.created_time }}
+</td>
+
+<td class="p-3">
+<a href="{% url 'alert_detail' alert.id %}"
+   class="text-blue-600 hover:underline">
+
+    {{ alert.attack_type }}
+
+</a>
+</td>
+
+<td class="p-3">
+
+{% if alert.severity == "HIGH" %}
+<span class="text-red-600 font-bold">
+{{ alert.severity }}
+</span>
+
+{% elif alert.severity == "MEDIUM" %}
+<span class="text-yellow-600 font-bold">
+{{ alert.severity }}
+</span>
+
+{% else %}
+<span class="text-green-600 font-bold">
+{{ alert.severity }}
+</span>
+
+{% endif %}
+
+</td>
+
+<td class="p-3">
+{{ alert.log.agent.hostname }}
+</td>
+
+<td class="p-3">
+
+{% if alert.status == "Open" %}
+<span class="bg-red-500 text-white px-3 py-1 rounded">
+Open
+</span>
+
+{% elif alert.status == "Investigating" %}
+<span class="bg-yellow-500 text-white px-3 py-1 rounded">
+Investigating
+</span>
+
+{% else %}
+<span class="bg-green-600 text-white px-3 py-1 rounded">
+Resolved
+</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+<td colspan="5" class="text-center p-5">
+No alerts found.
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+<div class="mt-6 flex justify-center gap-4">
+
+{% if alerts.has_previous %}
+<a href="?page={{ alerts.previous_page_number }}"
+class="px-4 py-2 bg-gray-300 rounded">
+Previous
+</a>
+{% endif %}
+
+<span class="px-4 py-2">
+Page {{ alerts.number }} of {{ alerts.paginator.num_pages }}
+</span>
+
+{% if alerts.has_next %}
+<a href="?page={{ alerts.next_page_number }}"
+class="px-4 py-2 bg-gray-300 rounded">
+Next
+</a>
+{% endif %}
+
+</div>
+
+</div>
+
+{% endblock %}
