@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Security Logs</title>
+</head>
+
+<body>
+
+    <h1>Security Logs</h1>
+
+    <form method="GET">
+
+        <input type="text" name="search" placeholder="Search message..." value="{{ search }}">
+
+        <button type="submit">
+            Search
+        </button>
+
+        <select name="severity">
+            <option value="">All Severities</option>
+            <option value="LOW" {% if severity=="LOW" %}selected{% endif %}>LOW</option>
+            <option value="MEDIUM" {% if severity=="MEDIUM" %}selected{% endif %}>MEDIUM</option>
+            <option value="HIGH" {% if severity=="HIGH" %}selected{% endif %}>HIGH</option>
+        </select>
+
+    </form>
+
+    <br>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Time</th>
+            <th>Agent</th>
+            <th>Event</th>
+            <th>Severity</th>
+            <th>Source</th>
+            <th>Message</th>
+        </tr>
+
+        {% for log in page_obj %}
+        <tr>
+            <td>{{ log.timestamp }}</td>
+            <td>{{ log.agent.hostname }}</td>
+            <td>{{ log.event_type }}</td>
+            <td>{{ log.severity }}</td>
+            <td>{{ log.source }}</td>
+            <td>{{ log.message }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No logs available.</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <div>
+
+        {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; First</a>
+
+        <a href="?search={{ search }}&page={{ page_obj.previous_page_number }}">
+            Previous
+        </a>
+        {% endif %}
+
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+
+        {% if page_obj.has_next %}
+        <a href="?search={{ search }}&page={{ page_obj.next_page_number }}">
+            Next
+        </a>
+
+        <a href="?page={{ page_obj.paginator.num_pages }}">
+            Last &raquo;
+        </a>
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
