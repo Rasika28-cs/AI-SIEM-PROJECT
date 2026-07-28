@@ -15,7 +15,8 @@ def send_log(log):
         print(
             "Log Sent:",
             response.status_code,
-            log["type"]
+            log["type"],
+            response.text
         )
 
     except Exception as e:
