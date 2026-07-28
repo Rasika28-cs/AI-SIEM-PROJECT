@@ -11,6 +11,7 @@ from attack_simulator import (
     simulate_suspicious_process
 )
 
+from collectors.windows_logs import collect_windows_events
 
 def main():
 
@@ -103,6 +104,15 @@ def main():
         send_log(log)
 
     print("\nAll logs sent successfully.")
+    windows_events = collect_windows_events()
+
+
+    for event in windows_events:
+
+        print(event)
+
+        # send to backend
+        # send_log(event)
 
 
 if __name__ == "__main__":
