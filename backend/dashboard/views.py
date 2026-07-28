@@ -13,7 +13,17 @@ def dashboard_view(request):
 
     total_agents = SystemAgent.objects.count()
 
+    online_agents = SystemAgent.objects.filter(status="Online").count()
+
     total_alerts = Alert.objects.count()
+
+    high_alerts = Alert.objects.filter(severity="HIGH").count()
+    
+    online_agents = SystemAgent.objects.filter(status="Online").count()
+
+    high_alerts = Alert.objects.filter(severity="HIGH").count()
+
+    recent_alerts = Alert.objects.order_by("-created_time")[:5]
 
     recent_logs = (
         SecurityLog.objects
@@ -21,11 +31,22 @@ def dashboard_view(request):
         .order_by("-timestamp")[:10]
     )
 
+
+    recent_alerts = (
+        Alert.objects
+        .order_by("-created_time")[:5]
+    )
+
+
     context = {
         "total_logs": total_logs,
         "total_agents": total_agents,
+        "online_agents": online_agents,
         "total_alerts": total_alerts,
+        "high_alerts": high_alerts,
         "recent_logs": recent_logs,
+        "recent_alerts": recent_alerts,
     }
+
 
     return render(request, "dashboard.html", context)
