@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
+from django.db.models import Count
 from logs.models import SecurityLog
 from alerts.models import Alert
 from agents.models import SystemAgent
@@ -31,10 +31,21 @@ def dashboard_view(request):
         .order_by("-timestamp")[:10]
     )
 
-
     recent_alerts = (
         Alert.objects
         .order_by("-created_time")[:5]
+    )
+
+    logs_by_severity = (
+        SecurityLog.objects
+        .values("severity")
+        .annotate(count=Count("id"))
+    )
+
+    alerts_by_status = (
+        Alert.objects
+        .values("status")
+        .annotate(count=Count("id"))
     )
 
 
@@ -46,6 +57,8 @@ def dashboard_view(request):
         "high_alerts": high_alerts,
         "recent_logs": recent_logs,
         "recent_alerts": recent_alerts,
+        "logs_by_severity": list(logs_by_severity),
+        "alerts_by_status": list(alerts_by_status),
     }
 
 
