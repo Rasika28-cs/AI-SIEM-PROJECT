@@ -13,16 +13,61 @@
 
         <input type="text" name="search" placeholder="Search message..." value="{{ search }}">
 
-        <button type="submit">
-            Search
-        </button>
-
         <select name="severity">
             <option value="">All Severities</option>
-            <option value="LOW" {% if severity=="LOW" %}selected{% endif %}>LOW</option>
-            <option value="MEDIUM" {% if severity=="MEDIUM" %}selected{% endif %}>MEDIUM</option>
-            <option value="HIGH" {% if severity=="HIGH" %}selected{% endif %}>HIGH</option>
+            <option value="LOW" {% if severity == "LOW" %}selected{% endif %}>LOW</option>
+            <option value="MEDIUM" {% if severity == "MEDIUM" %}selected{% endif %}>MEDIUM</option>
+            <option value="HIGH" {% if severity == "HIGH" %}selected{% endif %}>HIGH</option>
         </select>
+
+        <select name="event_type">
+
+            <option value="">All Events</option>
+
+            {% for event in event_types %}
+                <option value="{{ event }}"
+                    {% if event == event_type %}selected{% endif %}>
+                    {{ event }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <select name="agent">
+
+            <option value="">All Agents</option>
+
+            {% for a in agents %}
+                <option value="{{ a.id }}"
+                    {% if agent == a.id|stringformat:"s" %}selected{% endif %}>
+                    {{ a.hostname }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <select name="time">
+            <option value="">All Time</option>
+
+            <option value="today" {% if time_filter == "today" %}selected{% endif %}>
+                Today
+            </option>
+
+            <option value="24h" {% if time_filter == "24h" %}selected{% endif %}>
+                Last 24 Hours
+            </option>
+
+            <option value="7d" {% if time_filter == "7d" %}selected{% endif %}>
+                Last 7 Days
+            </option>
+
+            <option value="30d" {% if time_filter == "30d" %}selected{% endif %}>
+                Last 30 Days
+            </option>
+
+        </select>
+
+        <button type="submit">Search</button>
 
     </form>
 
@@ -60,7 +105,7 @@
         {% if page_obj.has_previous %}
         <a href="?page=1">&laquo; First</a>
 
-        <a href="?search={{ search }}&page={{ page_obj.previous_page_number }}">
+        <a href="?search={{ search }}&severity={{ severity }}&event_type={{ event_type }}&agent={{ agent }}&time={{ time_filter }}&page={{ page_obj.previous_page_number }}">
             Previous
         </a>
         {% endif %}
@@ -68,11 +113,11 @@
         Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
 
         {% if page_obj.has_next %}
-        <a href="?search={{ search }}&page={{ page_obj.next_page_number }}">
+        <a href="?search={{ search }}&severity={{ severity }}&event_type={{ event_type }}&agent={{ agent }}&time={{ time_filter }}&page={{ page_obj.next_page_number }}">
             Next
         </a>
 
-        <a href="?page={{ page_obj.paginator.num_pages }}">
+        <a href="?search={{ search }}&severity={{ severity }}&event_type={{ event_type }}&agent={{ agent }}&time={{ time_filter }}&page={{ page_obj.paginator.num_pages }}">
             Last &raquo;
         </a>
         {% endif %}
