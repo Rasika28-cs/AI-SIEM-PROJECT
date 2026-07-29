@@ -1,57 +1,24 @@
-import socket
-import platform
-import psutil
+from collector.system_info import get_system_info
+from collector.process_monitor import get_process_info
+from collector.network_monitor import get_network_info
+from collector.windows_log import get_windows_logs
+from collector.security_logs import get_security_logs
 
 
-def get_system_info():
-    """Collect basic system information."""
+def collect_all():
 
-    hostname = socket.gethostname()
+    collected_data = {
 
-    try:
-        ip_address = socket.gethostbyname(socket.gethostname())
-    except Exception:
-        ip_address = "Unknown"
+        "system_info": get_system_info(),
 
-    os_name = platform.system()
-    os_version = platform.version()
+        "process_info": get_process_info(),
 
-    cpu_usage = psutil.cpu_percent(interval=1)
+        "network_info": get_network_info(),
 
-    memory = psutil.virtual_memory()
+        "windows_logs": get_windows_logs(),
 
-    memory_total = round(memory.total / (1024 ** 3), 2)
-    memory_used = round(memory.used / (1024 ** 3), 2)
-    memory_percent = memory.percent
+        "security_logs": get_security_logs()
 
-    processes = []
-
-
-
-    for process in psutil.process_iter(['pid', 'name']):
-        try:
-
-            processes.append({
-                "pid": process.info["pid"],
-                "name": process.info["name"]
-            })
-
-        except (psutil.NoSuchProcess,
-                psutil.AccessDenied,
-                psutil.ZombieProcess):
-            pass
-
-    return {
-        "hostname": hostname,
-        "ip_address": ip_address,
-        "operating_system": os_name,
-        "os_version": os_version,
-        "cpu_usage": cpu_usage,
-        "memory": {
-            "total_gb": memory_total,
-            "used_gb": memory_used,
-            "usage_percent": memory_percent
-        },
-        "process_count": len(processes),
-        "running_processes": processes
     }
+
+    return collected_data
