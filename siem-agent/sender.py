@@ -7,6 +7,8 @@ def send_log(log):
 
     try:
 
+        print("Sending:", log)
+
         response = requests.post(
             SERVER_URL,
             json=log
