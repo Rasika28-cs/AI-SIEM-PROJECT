@@ -1,0 +1,59 @@
+.filter-bar{
+
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    margin:20px 0;
+
+}
+
+.filter-bar input,
+.filter-bar select{
+
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:6px;
+    min-width:170px;
+
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    margin-top:20px;
+
+}
+
+th{
+
+    background:#1e293b;
+    color:white;
+    padding:12px;
+
+}
+
+td{
+
+    padding:12px;
+    border-bottom:1px solid #ddd;
+
+}
+
+.pagination{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    margin-top:30px;
+
+}
+
+.pagination button{
+
+    padding:8px 16px;
+    cursor:pointer;
+
+}
