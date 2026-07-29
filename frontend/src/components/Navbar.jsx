@@ -15,3 +15,15 @@ function Navbar() {
 }
 
 export default Navbar;
+
+function logout() {
+
+    API.post("/accounts/logout/api/")
+
+        .then(() => {
+
+            window.location = "/";
+
+        });
+
+}
