@@ -1,5 +1,11 @@
+import DashboardLayout from "../layouts/DashboardLayout";
+
 function Agents() {
-  return <h1>Agents</h1>;
+  return (
+    <DashboardLayout>
+      <h1>Agents</h1>
+    </DashboardLayout>
+  );
 }
 
 export default Agents;

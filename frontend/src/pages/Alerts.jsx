@@ -1,5 +1,11 @@
+import DashboardLayout from "../layouts/DashboardLayout";
+
 function Alerts() {
-  return <h1>Alerts</h1>;
+  return (
+    <DashboardLayout>
+      <h1>Alerts</h1>
+    </DashboardLayout>
+  );
 }
 
 export default Alerts;
