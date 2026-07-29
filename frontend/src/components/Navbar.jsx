@@ -1,14 +1,16 @@
+import "./../styles/navbar.css";
+
 function Navbar() {
   return (
-    <div
-      style={{
-        background: "#334155",
-        color: "white",
-        padding: "15px",
-      }}
-    >
-      <h3>AI SIEM Assistant</h3>
-    </div>
+    <nav className="navbar">
+      <div>
+        <h2>AI SIEM Assistant</h2>
+      </div>
+
+      <div className="navbar-right">
+        <span>Welcome, Admin</span>
+      </div>
+    </nav>
   );
 }
 

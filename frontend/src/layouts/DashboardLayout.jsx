@@ -1,18 +1,24 @@
-import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+
+import "../styles/layout.css";
 
 function DashboardLayout({ children }) {
   return (
-    <div style={{ display: "flex" }}>
+    <div className="layout">
+
       <Sidebar />
 
-      <div style={{ flex: 1 }}>
+      <div className="main-content">
+
         <Navbar />
 
-        <div style={{ padding: "20px" }}>
+        <main className="page-content">
           {children}
-        </div>
+        </main>
+
       </div>
+
     </div>
   );
 }

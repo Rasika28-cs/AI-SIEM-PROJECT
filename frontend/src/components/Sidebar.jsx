@@ -1,28 +1,50 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import {
+  FaTachometerAlt,
+  FaFileAlt,
+  FaBell,
+  FaDesktop,
+  FaSignOutAlt,
+} from "react-icons/fa";
+
+import "../styles/sidebar.css";
 
 function Sidebar() {
   return (
-    <div
-      style={{
-        width: "220px",
-        background: "#1e293b",
-        color: "white",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
-    >
-      <h2>AI SIEM</h2>
+    <aside className="sidebar">
 
-      <hr />
+      <h2 className="logo">AI SIEM</h2>
 
-      <p><Link to="/dashboard">Dashboard</Link></p>
+      <NavLink to="/dashboard" className="menu-item">
+        <FaTachometerAlt />
+        <span>Dashboard</span>
+      </NavLink>
 
-      <p><Link to="/logs">Logs</Link></p>
+      <NavLink to="/logs" className="menu-item">
+        <FaFileAlt />
+        <span>Logs</span>
+      </NavLink>
 
-      <p><Link to="/alerts">Alerts</Link></p>
+      <NavLink to="/alerts" className="menu-item">
+        <FaBell />
+        <span>Alerts</span>
+      </NavLink>
 
-      <p><Link to="/agents">Agents</Link></p>
-    </div>
+      <NavLink to="/agents" className="menu-item">
+        <FaDesktop />
+        <span>Agents</span>
+      </NavLink>
+
+      <div className="logout">
+
+        <NavLink to="/" className="menu-item">
+          <FaSignOutAlt />
+          <span>Logout</span>
+        </NavLink>
+
+      </div>
+
+    </aside>
   );
 }
 
