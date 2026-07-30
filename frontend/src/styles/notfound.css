@@ -1,0 +1,65 @@
+.notfound {
+
+    height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 18px;
+
+    background: #f4f7fb;
+
+}
+
+.notfound h1 {
+
+    font-size: 110px;
+
+    color: #2563eb;
+
+    margin: 0;
+
+}
+
+.notfound h2 {
+
+    margin: 0;
+
+    color: #1f2937;
+
+}
+
+.notfound p {
+
+    color: #6b7280;
+
+}
+
+.notfound a {
+
+    margin-top: 15px;
+
+    padding: 12px 24px;
+
+    background: #2563eb;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    transition: 0.3s;
+
+}
+
+.notfound a:hover {
+
+    background: #1d4ed8;
+
+}
