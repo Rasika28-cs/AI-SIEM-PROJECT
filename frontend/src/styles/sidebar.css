@@ -32,6 +32,22 @@
     background:#2563eb;
 }
 
-.logout{
+.logout-btn{
+    width:100%;
+    background:none;
+    border:none;
+    color:white;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 20px;
+    font-size:16px;
+    cursor:pointer;
+    text-align:left;
     margin-top:auto;
+}
+
+.logout-btn:hover{
+    background:#2563eb;
+    border-radius:10px;
 }

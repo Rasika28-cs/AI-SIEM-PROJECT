@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaFileAlt,
@@ -7,10 +7,29 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
+import API from "../services/api";
 import "../styles/sidebar.css";
 
 function Sidebar() {
+
+  const navigate = useNavigate();
+
+  function logout() {
+
+    API.post("/logout/api/")
+
+      .then(() => {
+
+        navigate("/");
+
+      })
+
+      .catch(console.log);
+
+  }
+
   return (
+
     <aside className="sidebar">
 
       <h2 className="logo">AI SIEM</h2>
@@ -35,17 +54,18 @@ function Sidebar() {
         <span>Agents</span>
       </NavLink>
 
-      <div className="logout">
-
-        <NavLink to="/" className="menu-item">
-          <FaSignOutAlt />
-          <span>Logout</span>
-        </NavLink>
-
-      </div>
+      <button
+        className="menu-item logout-btn"
+        onClick={logout}
+      >
+        <FaSignOutAlt />
+        <span>Logout</span>
+      </button>
 
     </aside>
+
   );
+
 }
 
 export default Sidebar;
