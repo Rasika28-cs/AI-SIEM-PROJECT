@@ -1,0 +1,38 @@
+.detail-card{
+
+    background:white;
+    padding:25px;
+    border-radius:8px;
+    box-shadow:0 0 10px rgba(0,0,0,.1);
+    margin:25px 0;
+
+}
+
+.detail-card p{
+
+    margin:12px 0;
+
+}
+
+.status-box{
+
+    display:flex;
+    gap:15px;
+    margin-top:20px;
+
+}
+
+.status-box select{
+
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+
+}
+
+.status-box button{
+
+    padding:10px 20px;
+    cursor:pointer;
+
+}

@@ -1,0 +1,37 @@
+table{
+
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    margin-top:20px;
+
+}
+
+th{
+
+    background:#1e293b;
+    color:white;
+    padding:12px;
+
+}
+
+td{
+
+    padding:12px;
+    border-bottom:1px solid #ddd;
+
+}
+
+.online{
+
+    color:green;
+    font-weight:bold;
+
+}
+
+.offline{
+
+    color:red;
+    font-weight:bold;
+
+}

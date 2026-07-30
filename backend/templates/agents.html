@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Connected Agents</h2>
+
+<p>Registered systems monitored by AI SIEM</p>
+
+<hr>
+
+<table style="width:100%; border-collapse:collapse;">
+
+<tr style="background:#212529; color:white;">
+
+    <th>Hostname</th>
+    <th>Agent ID</th>
+    <th>IP Address</th>
+    <th>Operating System</th>
+    <th>Status</th>
+    <th>Last Seen</th>
+
+</tr>
+
+
+{% for agent in agents %}
+
+<tr>
+
+    <td>{{ agent.hostname }}</td>
+
+    <td>{{ agent.agent_id }}</td>
+
+    <td>{{ agent.ip_address }}</td>
+
+    <td>{{ agent.operating_system }}</td>
+
+    <td>
+        {% if agent.status == "Online" %}
+            <span style="color:green;">
+                {{ agent.status }}
+            </span>
+        {% else %}
+            <span style="color:red;">
+                {{ agent.status }}
+            </span>
+        {% endif %}
+    </td>
+
+    <td>{{ agent.last_seen }}</td>
+
+</tr>
+
+
+{% empty %}
+
+<tr>
+
+<td colspan="6">
+    No agents connected.
+</td>
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+
+{% endblock %}
