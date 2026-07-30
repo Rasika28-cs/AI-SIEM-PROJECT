@@ -78,20 +78,32 @@ function Dashboard() {
 
     };
 
-    useEffect(() => {
+
+    function fetchDashboard() {
 
         API.get("/dashboard/api/")
+
             .then(response => {
 
                 setData(response.data);
 
             })
-            .catch(error => {
 
-                console.log(error);
+            .catch(console.log);
 
-            });
+    }
 
+    useEffect(() => {
+
+        fetchDashboard();
+
+        const interval = setInterval(() => {
+
+            fetchDashboard();
+
+        }, 5000);
+
+        return () => clearInterval(interval);
 
     }, []);
 
