@@ -1,5 +1,5 @@
 import json
-
+import traceback
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -64,6 +64,8 @@ def upload_log(request):
         }, status=404)
 
     except Exception as e:
+
+        traceback.print_exc()
 
         return JsonResponse({
             "error": str(e)

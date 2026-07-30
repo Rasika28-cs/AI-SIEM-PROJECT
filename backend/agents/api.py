@@ -37,6 +37,7 @@ def agents_api(request):
     })
 
 
+
 @csrf_exempt
 def heartbeat_api(request):
 
@@ -48,23 +49,37 @@ def heartbeat_api(request):
 
     body = json.loads(request.body)
 
-    try:
+    agent, created = SystemAgent.objects.get_or_create(
 
-        agent = SystemAgent.objects.get(
-            agent_id=body["agent_id"]
-        )
+        agent_id=body["agent_id"],
 
-    except SystemAgent.DoesNotExist:
+        defaults={
 
-        return JsonResponse({
-            "error": "Agent not found"
-        }, status=404)
+            "hostname": body.get("hostname", "Unknown"),
 
+            "ip_address": body.get("ip_address", "0.0.0.0"),
+
+            "operating_system": body.get("operating_system", "Unknown"),
+
+            "status": "Online"
+
+        }
+
+    )
+
+    agent.hostname = body.get("hostname", agent.hostname)
+    agent.ip_address = body.get("ip_address", agent.ip_address)
+    agent.operating_system = body.get("operating_system", agent.operating_system)
+    agent.status = "Online"
     agent.last_seen = timezone.now()
+
     agent.save()
 
     return JsonResponse({
-        "success": True
-    })
 
+        "success": True,
+
+        "created": created
+
+    })
 
