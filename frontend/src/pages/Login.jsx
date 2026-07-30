@@ -19,18 +19,28 @@ function Login() {
 
         e.preventDefault();
 
-API.post("/login/api/", {
-    username,
-    password
-})
-.then((response) => {
-    console.log(response.data);
-    navigate("/dashboard");
-})
-.catch((error) => {
-    console.log(error.response?.data);
-    setError("Invalid username or password");
-});
+        API.post("/login/api/", {
+            username,
+            password
+        })
+
+        .then((response) => {
+
+            console.log(response.data);
+
+            sessionStorage.setItem("loggedIn", "true");
+
+            navigate("/dashboard");
+
+        })
+
+        .catch((error) => {
+
+            console.log(error.response?.data);
+
+            setError("Invalid username or password");
+
+        });
 
     }
 
@@ -49,14 +59,14 @@ API.post("/login/api/", {
                     type="text"
                     placeholder="Username"
                     value={username}
-                    onChange={(e)=>setUsername(e.target.value)}
+                    onChange={(e) => setUsername(e.target.value)}
                 />
 
                 <input
                     type="password"
                     placeholder="Password"
                     value={password}
-                    onChange={(e)=>setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                 />
 
                 <button>

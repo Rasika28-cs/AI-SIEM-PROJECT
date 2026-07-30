@@ -20,6 +20,8 @@ function Sidebar() {
 
       .then(() => {
 
+        sessionStorage.removeItem("loggedIn");
+
         navigate("/");
 
       })

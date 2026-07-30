@@ -9,21 +9,82 @@ import AlertDetail from "../pages/AlertDetail";
 import Agents from "../pages/Agents";
 import NotFound from "../pages/NotFound";
 
+import ProtectedRoute from "../components/ProtectedRoute";
+
 function AppRoutes() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/logs" element={<Logs />} />
-        <Route path="/alerts" element={<Alerts />} />
-        <Route path="/alerts/:id" element={<AlertDetail />} />
-        <Route path="/agents" element={<Agents />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  );
+
+    return (
+
+        <BrowserRouter>
+
+            <Routes>
+
+                <Route
+                    path="/"
+                    element={<Login />}
+                />
+
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
+
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/logs"
+                    element={
+                        <ProtectedRoute>
+                            <Logs />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/alerts"
+                    element={
+                        <ProtectedRoute>
+                            <Alerts />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/alerts/:id"
+                    element={
+                        <ProtectedRoute>
+                            <AlertDetail />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/agents"
+                    element={
+                        <ProtectedRoute>
+                            <Agents />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="*"
+                    element={<NotFound />}
+                />
+
+            </Routes>
+
+        </BrowserRouter>
+
+    );
+
 }
 
 export default AppRoutes;
