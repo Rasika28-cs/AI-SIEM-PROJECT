@@ -9,21 +9,33 @@ function Agents() {
 
     const [agents, setAgents] = useState([]);
 
-    useEffect(() => {
+    function fetchAgents() {
 
         API.get("/agents/api/")
 
-        .then(response => {
+            .then(response => {
 
-            setAgents(response.data.agents);
+                setAgents(response.data.agents);
 
-        })
+            })
 
-        .catch(console.log);
+            .catch(console.log);
+
+    }
+
+    useEffect(() => {
+
+        fetchAgents();
+
+        const interval = setInterval(() => {
+
+            fetchAgents();
+
+        }, 2000);
+
+        return () => clearInterval(interval);
 
     }, []);
-
-
 
     return (
 
@@ -44,15 +56,10 @@ function Agents() {
                     <tr>
 
                         <th>Hostname</th>
-
                         <th>Agent ID</th>
-
                         <th>IP Address</th>
-
                         <th>Operating System</th>
-
                         <th>Status</th>
-
                         <th>Last Seen</th>
 
                     </tr>
@@ -100,8 +107,8 @@ function Agents() {
                                         <span
                                             className={
                                                 agent.status === "Online"
-                                                ? "online"
-                                                : "offline"
+                                                    ? "online"
+                                                    : "offline"
                                             }
                                         >
 
@@ -111,11 +118,7 @@ function Agents() {
 
                                     </td>
 
-                                    <td>
-
-                                        {agent.last_seen}
-
-                                    </td>
+                                    <td>{agent.last_seen}</td>
 
                                 </tr>
 

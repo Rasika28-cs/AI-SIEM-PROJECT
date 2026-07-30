@@ -16,7 +16,7 @@ function Alerts() {
 
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
+  function fetchAlerts() {
 
     API.get("/alerts/api/", {
 
@@ -38,6 +38,20 @@ function Alerts() {
       })
 
       .catch(console.log);
+
+  }
+
+  useEffect(() => {
+
+    fetchAlerts();
+
+    const interval = setInterval(() => {
+
+      fetchAlerts();
+
+    }, 5000);
+
+    return () => clearInterval(interval);
 
   }, [search, severity, status, page]);
 

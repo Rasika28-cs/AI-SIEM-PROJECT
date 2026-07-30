@@ -14,7 +14,7 @@ function Logs() {
     const [time, setTime] = useState("");
     const [page, setPage] = useState(1);
 
-    useEffect(() => {
+    function fetchLogs() {
 
         API.get("/logs/api/", {
 
@@ -40,6 +40,20 @@ function Logs() {
             console.log(error);
 
         });
+
+    }
+
+   useEffect(() => {
+
+        fetchLogs();
+
+        const interval = setInterval(() => {
+
+            fetchLogs();
+
+        }, 5000);
+
+        return () => clearInterval(interval);
 
     }, [search, severity, eventType, agent, time, page]);
 
