@@ -8,7 +8,6 @@ import Alerts from "../pages/Alerts";
 import AlertDetail from "../pages/AlertDetail";
 import Agents from "../pages/Agents";
 import NotFound from "../pages/NotFound";
-
 import ProtectedRoute from "../components/ProtectedRoute";
 
 function AppRoutes() {
