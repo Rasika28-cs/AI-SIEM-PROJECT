@@ -28,3 +28,9 @@ SERVER_URL = config.get(
     "server_url",
     ""
 )
+
+
+HEARTBEAT_URL = config.get(
+    "heartbeat_url",
+    ""
+)

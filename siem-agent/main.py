@@ -5,7 +5,7 @@ from collectors.system_info import collect_system_info
 from collectors.network_monitor import collect_network_events
 
 
-from sender import send_log
+from sender import send_log, send_heartbeat
 from normalizer import normalize_log
 
 from heartbeat import generate_heartbeat
@@ -75,14 +75,11 @@ def main():
 
         print("\n========== AGENT HEARTBEAT ==========\n")
 
-
         heartbeat = generate_heartbeat()
-
 
         print(heartbeat)
 
-
-        send_log(heartbeat)
+        send_heartbeat(heartbeat)
 
 
 
