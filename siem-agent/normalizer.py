@@ -1,134 +1,234 @@
 from datetime import datetime
 from config import AGENT_ID
+import socket
 
 
-def normalize_log(source, raw_log):
+
+def normalize_log(raw_log):
+
     """
-    Convert any log into the standard SIEM event format.
+    Convert all SIEM Agent logs into common SIEM format.
+    Supports:
+    - System logs
+    - Process logs
+    - Login events
+    - Windows events
+    - Application logs
+    - Network logs
     """
 
-    # ------------------------------------
-    # Case 1: Already a structured dictionary
-    # ------------------------------------
-    if isinstance(raw_log, dict):
+    hostname = socket.gethostname()
 
-        return {
-            "time": datetime.now().isoformat(),
-            "agent": raw_log.get("agent", AGENT_ID),
-            "source": raw_log.get("source", source),
-            "type": raw_log.get("type", "UNKNOWN"),
-            "severity": raw_log.get("severity", "LOW"),
-            "message": raw_log.get("message", ""),
+
+    # Safety check
+
+    if not isinstance(raw_log, dict):
+
+        raw_log = {
+            "message": str(raw_log)
         }
 
-    # ------------------------------------
-    # Case 2: Raw text log
-    # ------------------------------------
 
-    source = source.lower()
-    text = str(raw_log).lower()
 
-    event = {
-        "time": datetime.now().isoformat(),
-        "agent": AGENT_ID,
-        "source": source.title(),
-        "type": "UNKNOWN",
-        "severity": "LOW",
-        "message": str(raw_log)
+    # Detect source
+
+    source = raw_log.get(
+        "source"
+    )
+
+
+    old_type = raw_log.get(
+        "type",
+        ""
+    )
+
+
+    event_type = raw_log.get(
+        "event_type"
+    )
+
+
+
+    category = "General"
+
+
+
+    # Source based classification
+
+    if source == "Windows":
+
+        category = "Authentication"
+
+
+
+    elif source == "Linux":
+
+        category = "Authentication"
+
+
+
+    elif source == "Application":
+
+        category = "Application"
+
+
+
+    elif source == "Network":
+
+        category = "Network"
+
+
+
+    elif old_type == "LOGIN_FAILED":
+
+        source = "Windows"
+
+        category = "Authentication"
+
+        event_type = "LOGIN_FAILED"
+
+
+
+    elif old_type == "PROCESS":
+
+        source = "System"
+
+        category = "Process"
+
+        event_type = "PROCESS"
+
+
+
+    elif old_type == "NETWORK":
+
+        source = "Network"
+
+        category = "Network"
+
+        event_type = "NETWORK_CONNECTION"
+
+
+
+    else:
+
+        source = source or "Unknown"
+
+
+
+    # Event type fallback
+
+    if not event_type:
+
+        event_type = old_type or "UNKNOWN"
+
+
+
+    # Final normalized SIEM event
+
+    normalized = {
+
+
+        "agent_id": AGENT_ID,
+
+
+        "hostname": hostname,
+
+
+        "timestamp": raw_log.get(
+            "timestamp",
+            datetime.now().isoformat()
+        ),
+
+
+        "source": source,
+
+
+        "category": category,
+
+
+        "event_type": event_type,
+
+
+        "severity": raw_log.get(
+            "severity",
+            "LOW"
+        ),
+
+
+        "username": raw_log.get(
+            "username",
+            raw_log.get(
+                "user",
+                "unknown"
+            )
+        ),
+
+
+        "message": raw_log.get(
+            "message",
+            ""
+        ),
+
+
+
+        # Network details
+
+        "ip_address": raw_log.get(
+            "ip_address",
+            None
+        ),
+
+
+        "local_address": raw_log.get(
+            "local_address",
+            None
+        ),
+
+
+        "remote_address": raw_log.get(
+            "remote_address",
+            None
+        ),
+
+
+        "protocol": raw_log.get(
+            "protocol",
+            None
+        ),
+
+
+        "status": raw_log.get(
+            "status",
+            None
+        ),
+
+
+        "pid": raw_log.get(
+            "pid",
+            None
+        ),
+
+
+
+        "process_name": raw_log.get(
+            "process_name",
+            None
+        ),
+
+
+        "application": raw_log.get(
+            "application",
+            None
+        ),
+
+
+
+        # Original event
+
+        "raw_data": raw_log
+
     }
 
-    # ====================================
-    # Windows
-    # ====================================
 
-    if source == "windows":
 
-        if "4625" in text or "failed login" in text:
-            event["type"] = "FAILED_LOGIN"
-            event["severity"] = "HIGH"
-            event["message"] = "Windows failed login"
-
-        elif "4624" in text:
-            event["type"] = "SUCCESSFUL_LOGIN"
-            event["severity"] = "LOW"
-            event["message"] = "Windows successful login"
-
-        elif "4720" in text:
-            event["type"] = "USER_CREATED"
-            event["severity"] = "MEDIUM"
-
-        elif "4726" in text:
-            event["type"] = "USER_DELETED"
-            event["severity"] = "HIGH"
-
-    # ====================================
-    # Linux
-    # ====================================
-
-    elif source == "linux":
-
-        if "failed password" in text:
-            event["type"] = "FAILED_LOGIN"
-            event["severity"] = "HIGH"
-            event["message"] = "SSH login failed"
-
-        elif "accepted password" in text:
-            event["type"] = "SUCCESSFUL_LOGIN"
-            event["severity"] = "LOW"
-
-        elif "sudo" in text:
-            event["type"] = "PRIVILEGE_ESCALATION"
-            event["severity"] = "MEDIUM"
-
-    # ====================================
-    # Application
-    # ====================================
-
-    elif source == "application":
-
-        if "critical" in text:
-            event["type"] = "APPLICATION_CRITICAL"
-            event["severity"] = "CRITICAL"
-
-        elif "error" in text:
-            event["type"] = "APPLICATION_ERROR"
-            event["severity"] = "HIGH"
-
-        elif "warning" in text:
-            event["type"] = "APPLICATION_WARNING"
-            event["severity"] = "MEDIUM"
-
-    # ====================================
-    # Network
-    # ====================================
-
-    elif source == "network":
-
-        if "port scan" in text:
-            event["type"] = "PORT_SCAN"
-            event["severity"] = "HIGH"
-
-        elif "connection refused" in text:
-            event["type"] = "CONNECTION_REFUSED"
-            event["severity"] = "MEDIUM"
-
-    # ====================================
-    # Generic Threat Detection
-    # ====================================
-
-    keywords = {
-        "malware": ("MALWARE_DETECTED", "CRITICAL"),
-        "ransomware": ("RANSOMWARE", "CRITICAL"),
-        "virus": ("VIRUS_DETECTED", "HIGH"),
-        "sql injection": ("SQL_INJECTION", "CRITICAL"),
-        "xss": ("XSS_ATTACK", "HIGH"),
-        "brute force": ("BRUTE_FORCE", "HIGH"),
-    }
-
-    for keyword, (event_type, severity) in keywords.items():
-        if keyword in text:
-            event["type"] = event_type
-            event["severity"] = severity
-            break
-
-    return event
+    return normalized

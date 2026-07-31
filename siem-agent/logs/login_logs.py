@@ -3,12 +3,12 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from formatter import format_log
-from collector import get_system_info
+from collectors.system_info import collect_system_info
 
 
 def collect_login_events():
 
-    system_info = get_system_info()
+    system_info = collect_system_info()
 
     logs = []
 

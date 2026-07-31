@@ -1,2 +1,7 @@
-INFO User login successful
-ERROR Payment service failed
+INFO Application started successfully
+
+ERROR Database connection failed
+
+WARNING High memory usage detected
+
+CRITICAL Unauthorized access detected

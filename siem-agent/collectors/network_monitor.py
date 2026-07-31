@@ -1,55 +1,83 @@
 import psutil
+import socket
 from datetime import datetime
 
 
-def collect_network_connections():
+def get_protocol(connection):
+    """
+    Identify the network protocol from the socket type.
+    """
 
-    connections = []
+    if connection.type == socket.SOCK_STREAM:
+        return "TCP"
+
+    if connection.type == socket.SOCK_DGRAM:
+        return "UDP"
+
+    return "UNKNOWN"
 
 
-    for conn in psutil.net_connections(kind="inet"):
+def format_address(address):
+    """
+    Convert psutil address object into IP:PORT format.
+    """
+
+    if not address:
+        return None
+
+    try:
+        return f"{address.ip}:{address.port}"
+    except AttributeError:
+        return str(address)
+
+
+def collect_network_events():
+    """
+    Collect active TCP and UDP network connections.
+
+    Returns:
+        list: Raw network event dictionaries.
+    """
+
+    network_events = []
+
+    try:
+        connections = psutil.net_connections(kind="inet")
+
+    except Exception as error:
+        print(f"[NETWORK] Unable to collect connections: {error}")
+        return network_events
+
+    for connection in connections:
 
         try:
+            local_address = format_address(connection.laddr)
+            remote_address = format_address(connection.raddr)
 
-            network_data = {
+            protocol = get_protocol(connection)
 
+            event = {
+                "event_type": "NETWORK_CONNECTION",
 
-                "timestamp":
-                datetime.now().isoformat(),
+                "source": "Network",
 
+                "protocol": protocol,
 
-                "local_address":
-                str(conn.laddr)
-                if conn.laddr else None,
+                "local_address": local_address,
 
+                "remote_address": remote_address,
 
-                "remote_address":
-                str(conn.raddr)
-                if conn.raddr else None,
+                "status": connection.status,
 
+                "pid": connection.pid,
 
-                "status":
-                conn.status,
-
-
-                "protocol":
-                "TCP"
-                if conn.type == 1
-                else "UDP",
-
-
-                "pid":
-                conn.pid
+                "timestamp": datetime.now().isoformat(),
 
             }
 
-
-            connections.append(network_data)
-
+            network_events.append(event)
 
         except Exception:
+            continue
 
-            pass
-
-
-    return connections
+    return network_events

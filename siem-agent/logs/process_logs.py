@@ -1,6 +1,6 @@
 import psutil
 
-from collector import get_system_info
+from collectors.system_info import collect_system_info
 from formatter import format_log
 
 
@@ -8,7 +8,7 @@ def collect_process_events():
 
     events = []
 
-    system_info = get_system_info()
+    system_info = collect_system_info()
 
     count = 0
 
