@@ -22,8 +22,8 @@ def upload_log(request):
         data = json.loads(request.body)
 
         required_fields = [
-            "agent",
-            "type",
+            "agent_id",
+            "event_type",
             "severity",
             "message"
         ]
@@ -38,16 +38,27 @@ def upload_log(request):
                 )
 
         agent = SystemAgent.objects.get(
-            agent_id=data["agent"]
+            agent_id=data["agent_id"]
         )
 
         new_log = SecurityLog.objects.create(
+
             agent=agent,
-            event_type=data["type"],
+
+            event_type=data["event_type"],
+
             severity=data["severity"],
-            source=data.get("source", "SIEM Agent"),
+
+            source=data.get("source", "Unknown"),
+
+            category=data.get("category", ""),
+
+            username=data.get("username", ""),
+
             message=data["message"],
+
             raw_data=data
+
         )
 
         detect_brute_force(new_log)

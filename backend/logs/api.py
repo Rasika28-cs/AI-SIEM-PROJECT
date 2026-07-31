@@ -33,6 +33,8 @@ def logs_api(request):
             Q(message__icontains=search) |
             Q(event_type__icontains=search) |
             Q(source__icontains=search) |
+            Q(category__icontains=search) |
+            Q(username__icontains=search) |
             Q(agent__hostname__icontains=search)
         )
 
@@ -84,10 +86,19 @@ def logs_api(request):
         page_obj.object_list.values(
 
             "timestamp",
+
             "agent__hostname",
+
             "event_type",
+
             "severity",
+
             "source",
+
+            "category",
+
+            "username",
+
             "message"
 
         )
